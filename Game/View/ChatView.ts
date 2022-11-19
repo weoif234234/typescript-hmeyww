@@ -3,15 +3,16 @@ import { ChatMessage } from '../Model/ChatMessage';
 
 export class ChatView {
   private $: any = window['$'];
-  private _messages: string[];
+  private _messages: string[] = [];
   constructor() {}
 
   public MessageArrived(message: ChatMessage) {
-    var messageString = `${message.time.toString()} ${
-      message.sender.name
-    }: ${this.escapeHtml(message.text)}`;
-    this.$('#chat_text')[0].textContent += messageString;
-    this.$('#chat_text')[0].innerHTML += '<br>';
+    var date = new Date(message.time);
+    var messageString = `<b>${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${ message.sender.name }:</b> ${this.escapeHtml(message.text)}`;
+    
+    this._messages.push(messageString);
+    
+    this.$('#chat_text')[0].innerHTML = this._messages.join("<br>");
   }
 
   private escapeHtml(unsafe: string) {
